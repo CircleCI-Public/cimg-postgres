@@ -6,6 +6,7 @@ LABEL maintainer="Community & Partner Engineering Team <community-partner@circle
 
 ENV PG_VER=10.17
 ENV PG_MAJOR=10
+ENV POSTGRES_HOST_AUTH_METHOD=trust
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
