@@ -1,11 +1,11 @@
 # vim:set ft=dockerfile:
 
-FROM cimg/base:2021.04
+FROM cimg/base:2021.07
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
 ENV PG_VER=13.3
-ENV PG_MAJOR=%%MAJOR_VERSION%%
+ENV PG_MAJOR=13
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
