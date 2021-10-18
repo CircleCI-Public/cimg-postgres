@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		gosu \
 		dirmngr \
 	&& \
-	sudo rm -rf /var/lib/apt/lists/* && \
-	curl -sSL "https://ftp.postgresql.org/pub/source/v${PG_VER}/postgresql-${PG_VER}.tar.gz" | sudo tar -xz && \
+	rm -rf /var/lib/apt/lists/* && \
+	curl -sSL "https://ftp.postgresql.org/pub/source/v${PG_VER}/postgresql-${PG_VER}.tar.gz" | tar -xz && \
 	cd postgresql-${PG_VER} && \
 	./configure --prefix=/usr/lib/postgresql/$PG_MAJOR && \
 	make && \

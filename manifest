@@ -2,4 +2,4 @@
 
 repository=postgres
 parent=base
-variants=()
+variants=(postgis)
