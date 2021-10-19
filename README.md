@@ -10,8 +10,6 @@
 
 [![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/cimg-postgres.svg?style=shield)](https://circleci.com/gh/CircleCI-Public/cimg-postgres) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/CircleCI-Public/cimg-postgres/master/LICENSE) [![Docker Pulls](https://img.shields.io/docker/pulls/cimg/postgres)](https://hub.docker.com/r/cimg/postgres) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/circleci-images)
 
-**This image is currently in beta.**
-
 ***This image is designed to supercede the legacy CircleCI PostgreSQL image, `circleci/postgres`.***
 
 `cimg/postgres` is a Docker image created by CircleCI with continuous integration builds in mind.
@@ -36,7 +34,7 @@ For example:
 jobs:
   build:
     docker:
-      - image: cimg/go:1.16
+      - image: cimg/go:1.17
       - image: cimg/postgres:13.2
     steps:
       - checkout
@@ -50,6 +48,34 @@ You can now connect to a PostgreSQL instance from the primary image within the s
 ## How This Image Works
 
 This image contains the PostgreSQL database and its complete toolchain.
+
+### Variants
+
+Variant images typically contain the same base software, but with a few additional modifications.
+
+#### PostGIS
+
+The PostGIS variant is the same PostgreSQL image but with PostGIS (and its several dependencies) pre-installed.
+The PostGIS variant can be used by appending `-postgis` to the end of an existing `cimg/postgres` tag.
+
+```yaml
+jobs:
+  build:
+    docker:
+      - image: cimg/go:1.17
+      - image: cimg/postgres:13.1-postgis
+    steps:
+      - checkout
+      - run: echo "Do things"
+```
+
+#### RAM
+
+The legacy version of this image, `circleci/postgres` had a RAM variant.
+This is no longer the case.
+We're determining how much of a performance increase does this variant actually give before we decide to bring it back.
+If you used the legacy PostgreSQL image and you have data on the ram vs non-ram variant build times, please open a GitHub Issue and let us know.
+
 
 ### Tagging Scheme
 
