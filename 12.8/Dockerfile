@@ -4,8 +4,8 @@ FROM cimg/base:2021.10
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
-ENV PG_VER=9.6.23
-ENV PG_MAJOR=9
+ENV PG_VER=12.8
+ENV PG_MAJOR=12
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 
 USER root
