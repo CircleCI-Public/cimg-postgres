@@ -4,7 +4,7 @@ FROM cimg/base:2021.10
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
-ENV PG_VER=9.6.23
+ENV PG_VER=9.6.22
 ENV PG_MAJOR=9
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 
@@ -20,7 +20,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	cd postgresql-${PG_VER} && \
 	./configure --prefix=/usr/lib/postgresql/$PG_MAJOR && \
 	make && \
-	make install all
+	make install all && \
+	cd contrib && \
+	make && \
+	make install
 
 RUN mkdir /docker-entrypoint-initdb.d
 
