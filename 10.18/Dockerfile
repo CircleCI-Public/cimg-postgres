@@ -20,7 +20,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	cd postgresql-${PG_VER} && \
 	./configure --prefix=/usr/lib/postgresql/$PG_MAJOR && \
 	make && \
-	make install all
+	make install all && \
+	cd contrib && \
+	make && \
+	make install
 
 RUN mkdir /docker-entrypoint-initdb.d
 
