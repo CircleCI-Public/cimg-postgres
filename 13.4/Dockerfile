@@ -11,6 +11,7 @@ ENV POSTGRES_HOST_AUTH_METHOD=trust
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		libreadline-dev \
+		uuid-dev \
 		gnupg \
 		gosu \
 		dirmngr \
@@ -18,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	rm -rf /var/lib/apt/lists/* && \
 	curl -sSL "https://ftp.postgresql.org/pub/source/v${PG_VER}/postgresql-${PG_VER}.tar.gz" | tar -xz && \
 	cd postgresql-${PG_VER} && \
-	./configure --prefix=/usr/lib/postgresql/$PG_MAJOR && \
+	./configure --prefix=/usr/lib/postgresql/$PG_MAJOR --with-uuid=e2fs && \
 	make && \
 	make install all && \
 	cd contrib && \
