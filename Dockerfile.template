@@ -19,7 +19,34 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	rm -rf /var/lib/apt/lists/* && \
 	curl -sSL "https://ftp.postgresql.org/pub/source/v${PG_VER}/postgresql-${PG_VER}.tar.gz" | tar -xz && \
 	cd postgresql-${PG_VER} && \
-	./configure --prefix=/usr/lib/postgresql/$PG_MAJOR --with-uuid=e2fs && \
+	./configure \
+		--prefix=/usr/lib/postgresql/$PG_MAJOR \
+		--enable-integer-datetimes \
+		--enable-thread-safety \
+		--enable-tap-tests \
+		--with-uuid=e2fs \
+		--with-gnu-ld \
+		--with-pgport=5432 \
+		--with-system-tzdata=/usr/share/zoneinfo \
+		--with-includes=/usr/local/include \
+		--with-libraries=/usr/local/lib \
+		--with-krb5 \
+		--with-gssapi \
+		--with-ldap \
+		--with-pam \
+		--with-tcl \
+		--with-perl \
+		--with-python \
+		--with-openssl \
+		--with-libxml \
+		--with-libxslt \
+		--with-icu \
+		--with-llvm \
+		--with-lz4 \
+	&& \
+	make world-bin && \
+	make install-world-bin && \
+	cd contrib && \
 	make && \
 	make install all && \
 	cd contrib && \
