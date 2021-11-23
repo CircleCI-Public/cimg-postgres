@@ -10,13 +10,32 @@ ENV POSTGRES_HOST_AUTH_METHOD=trust
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
-		libreadline-dev \
-		uuid-dev \
+		clang \
+		dirmngr \
 		gnupg \
 		gosu \
-		dirmngr \
+		libclang-dev \
+		libicu-dev \
+		libipc-run-perl \
+		libkrb5-dev \
+		libldap2-dev \
+		liblz4-dev \
+		libpam-dev \
+		libperl-dev \
+		libpython3-dev \
+		libreadline-dev \
+		libssl-dev \
+		libxml2-dev \
+		libxslt1-dev \
+		llvm \
+		llvm-dev \
+		locales \
+		python3-dev \
+		tcl-dev \
+		uuid-dev \
 	&& \
 	rm -rf /var/lib/apt/lists/* && \
+	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
 	curl -sSL "https://ftp.postgresql.org/pub/source/v${PG_VER}/postgresql-${PG_VER}.tar.gz" | tar -xz && \
 	cd postgresql-${PG_VER} && \
 	./configure \
@@ -44,14 +63,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		--with-llvm \
 		--with-lz4 \
 	&& \
-	make world-bin && \
-	make install-world-bin && \
-	cd contrib && \
-	make && \
-	make install all && \
-	cd contrib && \
-	make && \
-	make install
+	# we can change from world to world-bin in newer releases
+	make world && \
+	make install-world
 
 RUN mkdir /docker-entrypoint-initdb.d
 
