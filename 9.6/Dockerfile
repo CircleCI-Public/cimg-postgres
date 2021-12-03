@@ -4,7 +4,7 @@ FROM cimg/base:2021.10
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
-ENV PG_VER=9.6.22
+ENV PG_VER=9.6.23
 ENV PG_MAJOR=9
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 
@@ -73,7 +73,7 @@ ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
 
 RUN useradd postgres -m -s /bin/bash && \
-	addgroup potsgres && \
+	addgroup postgres && \
 	adduser postgres postgres
 
 ENV POSTGRES_DB=circle_test
