@@ -1,6 +1,6 @@
 # vim:set ft=dockerfile:
 
-FROM cimg/postgres:9.6.22
+FROM cimg/postgres:9.6.23
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
