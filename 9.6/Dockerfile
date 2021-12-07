@@ -73,7 +73,7 @@ ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
 
 RUN useradd postgres -m -s /bin/bash && \
-	addgroup postgres && \
+	groupadd --force postgres && \
 	adduser postgres postgres
 
 ENV POSTGRES_DB=circle_test
