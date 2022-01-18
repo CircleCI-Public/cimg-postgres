@@ -3,3 +3,4 @@
 repository=postgres
 parent=base
 variants=(postgis)
+namespace=cimg
