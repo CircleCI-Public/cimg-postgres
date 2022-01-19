@@ -8,7 +8,7 @@
 	<h3>A Continuous Integration focused PostgreSQL Docker image built to run on CircleCI</h3>
 </div>
 
-[![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/cimg-postgres.svg?style=shield)](https://circleci.com/gh/CircleCI-Public/cimg-postgres) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/CircleCI-Public/cimg-postgres/master/LICENSE) [![Docker Pulls](https://img.shields.io/docker/pulls/cimg/postgres)](https://hub.docker.com/r/cimg/postgres) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/circleci-images)
+[![CircleCI Build Status](https://circleci.com/gh/CircleCI-Public/cimg-postgres.svg?style=shield)](https://circleci.com/gh/CircleCI-Public/cimg-postgres) [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/CircleCI-Public/cimg-postgres/master/LICENSE) [![Docker Pulls](https://img.shields.io/docker/pulls/cimg/postgres)](https://hub.docker.com/r/cimg/postgres) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/circleci-images) [![Repository](https://img.shields.io/badge/github-README-brightgreen)](https://github.com/CircleCI-Public/cimg-postgres)
 
 ***This image is designed to supercede the legacy CircleCI PostgreSQL image, `circleci/postgres`.***
 
