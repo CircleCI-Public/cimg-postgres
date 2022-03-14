@@ -8,8 +8,8 @@ docker push cimg/postgres:9.6-postgis
 docker push cimg/postgres:10.19
 docker push cimg/postgres:10.19-postgis
 
-docker push cimg/postgres:11.4
-docker push cimg/postgres:11.4-postgis
+docker push cimg/postgres:11.14
+docker push cimg/postgres:11.14-postgis
 
 docker push cimg/postgres:12.9
 docker push cimg/postgres:12.9-postgis
