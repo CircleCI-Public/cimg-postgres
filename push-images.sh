@@ -11,8 +11,8 @@ docker push cimg/postgres:10.19-postgis
 docker push cimg/postgres:11.4
 docker push cimg/postgres:11.4-postgis
 
-docker push cimg/postgres:12.9
-docker push cimg/postgres:12.9-postgis
+docker push cimg/postgres:12.10
+docker push cimg/postgres:12.10-postgis
 
 docker push cimg/postgres:13.5
 docker push cimg/postgres:13.5-postgis
