@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 # Do not edit by hand; please use build scripts/templates to make changes
 
-docker build --file 10.20/Dockerfile -t cimg/postgres:10.20 .
-docker build --file 10.20/postgis/Dockerfile -t cimg/postgres:10.20-postgis .
-docker build --file 11.15/Dockerfile -t cimg/postgres:11.15 .
-docker build --file 11.15/postgis/Dockerfile -t cimg/postgres:11.15-postgis .
-docker build --file 13.6/Dockerfile -t cimg/postgres:13.6 .
-docker build --file 13.6/postgis/Dockerfile -t cimg/postgres:13.6-postgis .
-docker build --file 14.2/Dockerfile -t cimg/postgres:14.2 .
-docker build --file 14.2/postgis/Dockerfile -t cimg/postgres:14.2-postgis .
+docker build --file 10.21/Dockerfile -t cimg/postgres:10.21 .
+docker build --file 10.21/postgis/Dockerfile -t cimg/postgres:10.21-postgis .
+docker build --file 11.16/Dockerfile -t cimg/postgres:11.16 .
+docker build --file 11.16/postgis/Dockerfile -t cimg/postgres:11.16-postgis .
+docker build --file 12.11/Dockerfile -t cimg/postgres:12.11 .
+docker build --file 12.11/postgis/Dockerfile -t cimg/postgres:12.11-postgis .
+docker build --file 13.7/Dockerfile -t cimg/postgres:13.7 .
+docker build --file 13.7/postgis/Dockerfile -t cimg/postgres:13.7-postgis .
+docker build --file 14.3/Dockerfile -t cimg/postgres:14.3 .
+docker build --file 14.3/postgis/Dockerfile -t cimg/postgres:14.3-postgis .
+docker build --file 14.4/Dockerfile -t cimg/postgres:14.4 .
+docker build --file 14.4/postgis/Dockerfile -t cimg/postgres:14.4-postgis .

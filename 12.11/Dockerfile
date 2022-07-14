@@ -2,12 +2,12 @@
 
 # Do not edit individual Dockerfiles manually. Instead, please make changes to the Dockerfile.template, which will be used by the build script to generate Dockerfiles.
 
-FROM cimg/%%PARENT%%:2022.06
+FROM cimg/base:2022.06
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
-ENV PG_VER=%%VERSION_FULL%%
-ENV PG_MAJOR=%%VERSION_MAJOR%%
+ENV PG_VER=12.11
+ENV PG_MAJOR=12
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 
 USER root
