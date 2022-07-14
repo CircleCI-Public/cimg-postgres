@@ -9,5 +9,7 @@ docker build --file 12.11/Dockerfile -t cimg/postgres:12.11 .
 docker build --file 12.11/postgis/Dockerfile -t cimg/postgres:12.11-postgis .
 docker build --file 13.7/Dockerfile -t cimg/postgres:13.7 .
 docker build --file 13.7/postgis/Dockerfile -t cimg/postgres:13.7-postgis .
+docker build --file 14.3/Dockerfile -t cimg/postgres:14.3 .
+docker build --file 14.3/postgis/Dockerfile -t cimg/postgres:14.3-postgis .
 docker build --file 14.4/Dockerfile -t cimg/postgres:14.4 .
 docker build --file 14.4/postgis/Dockerfile -t cimg/postgres:14.4-postgis .

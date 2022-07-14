@@ -13,5 +13,8 @@ docker push cimg/postgres:12.11-postgis
 docker push cimg/postgres:13.7
 docker push cimg/postgres:13.7-postgis
 
+docker push cimg/postgres:14.3
+docker push cimg/postgres:14.3-postgis
+
 docker push cimg/postgres:14.4
 docker push cimg/postgres:14.4-postgis
