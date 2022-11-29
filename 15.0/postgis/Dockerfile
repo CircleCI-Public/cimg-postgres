@@ -4,7 +4,7 @@ FROM cimg/postgres:15.0
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
-ENV POSTGIS_VER=3.1.4
+ENV POSTGIS_VER=3.2.2
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		libgdal-dev \
 		libgeos-dev \
