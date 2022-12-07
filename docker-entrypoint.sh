@@ -87,7 +87,7 @@ docker_init_database_dir() {
 		unset LD_PRELOAD NSS_WRAPPER_PASSWD NSS_WRAPPER_GROUP
 	fi
 
-	echo "listen_addresses = '*'" >> /var/lib/postgresql/data/postgresql.conf
+	echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
 }
 
 # print large warning if POSTGRES_PASSWORD is long
