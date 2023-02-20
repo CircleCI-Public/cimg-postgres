@@ -151,6 +151,21 @@ To build the Docker images locally as this repository does, you'll want to run t
 This would need to be run after generating the Dockerfiles first.
 When releasing proper images for CircleCI, this script is run from a CircleCI pipeline and not locally.
 
+## Configuration
+
+Because some configurations for postgres are enabled at runtime, it is difficult if not impossible to change certain settings.
+As a result, we've provided a configuration file within this repository that allows you to import certain properties that can support your use case. This is located at the project root under `postgres.conf`, however, you would be able to supply a custom configuration file yourself. In doing so, you would also need to specify this file when running the docker container.
+
+For example, in the `.circleci/config.yml`, we are using it with this command; specifically, the "postgres -c 'config_file=xxx'" addition.
+
+```bash
+docker run --rm --env POSTGRES_USER=user --env POSTGRES_PASSWORD=passw0rd -p 5432:5432 -d $IMAGE postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+```
+
+
+For additional resources on how to configure, you would be able to visit [this link](https://github.com/docker-library/docs/blob/master/postgres/README.md#database-configuration) for additional details.
+
+
 ### Publishing Official Images (for Maintainers only)
 
 The individual scripts (above) can be used to create the correct files for an image, and then added to a new git branch, committed, etc.
