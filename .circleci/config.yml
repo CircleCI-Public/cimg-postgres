@@ -1,27 +1,60 @@
 version: 2.1
 
 orbs:
-  sonar: hubci/sonar@1.0.0
+  cimg: circleci/cimg@0.3.0
 
 workflows:
-  main:
+  main-wf:
     jobs:
-      - build:
+      - cimg/build-and-deploy:
+          name: "Staging"
+          docker-namespace: ccitest
+          docker-repository: postgres
+          publish-branch: test
+          filters:
+            branches:
+              ignore:
+                - main
+          context: cimg-publishing
+          post-steps:
+            - run:
+                mkdir -p /tmp/builds
+                eval docker images --format='{{.Repository}}:{{.Tag}}' | grep "ccitest/postgres" > /tmp/builds/built-images
+            - persist_to_workspace:
+                root: /tmp/builds
+                paths:
+                  - built-images
+      - test:
+          name: "Test Postgres"
+          filters:
+            branches:
+              ignore:
+                - main
+          requires:
+            - "Staging"
+          context: cimg-publishing
+      - cimg/build-and-deploy:
+          name: "Deploy"
+          docker-repository: postgres
+          filters:
+            branches:
+              only:
+                - main
           context: cimg-publishing
 
 jobs:
-  build:
+  test:
     docker:
-      - image: cimg/base:2022.01
+      - image: cimg/base:2023.01
     steps:
+      - attach_workspace:
+          at: /tmp/builds
       - checkout
       - setup_remote_docker:
-          version: "20.10.11"
+          version: "20.10.18"
       - run:
-          name: "Build Docker Images"
+          name: "Log in to Docker"
           command: |
-            ./build-images.sh
-            docker images
             echo 'export DOCKER_PASS=$DOCKER_TOKEN' >> $BASH_ENV
       - run:
           name: "Install Test Prerequisites"
@@ -33,8 +66,7 @@ jobs:
           shell: /bin/bash -o pipefail
           command: |
             ssh -f -N -L localhost:5432:localhost:5432 remote-docker
-            IMAGES=$(docker images --format='{{.Repository}}:{{.Tag}}' | grep "cimg/postgres")
-            for IMAGE in $IMAGES; do
+            for IMAGE in $(cat /tmp//builds/built-images); do
               printf "Booting $IMAGE...\n"
               CONTAINER_ID=$(docker run --rm --env POSTGRES_USER=user --env POSTGRES_PASSWORD=passw0rd -p 5432:5432 -d $IMAGE)
               for i in {1..20}; do
@@ -63,26 +95,3 @@ jobs:
               docker stop $CONTAINER_ID >/dev/null 2>&1
             done
             printf "All images passed!\n"
-      - deploy:
-          name: "Publish Docker Images (main branch only)"
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              
-              echo $DOCKER_TOKEN | docker login -u $DOCKER_USER --password-stdin
-              
-              # an else block will be added in the future for a staging release
-              if git log -1 --pretty=%s | grep "\[release\]"; then
-                echo "Publishing cimg/postgres to Docker Hub production."
-                ./push-images.sh
-              else
-                echo "Skipping publishing."
-              fi
-            fi
-      - when:
-          condition:
-            equal: [main, << pipeline.git.branch >>]
-          steps:
-            - sonar/install:
-                version: "0.15.0"
-            - sonar/update-readme:
-                image: cimg/postgres
