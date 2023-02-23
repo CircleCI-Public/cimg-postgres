@@ -215,6 +215,9 @@ We encourage [issues](https://github.com/CircleCI-Public/cimg-postgres/issues) a
 It will list all of the keys and values supported in `.circleci/config.yml`.
 [Docker Docs](https://docs.docker.com/) - For simple projects this won't be needed but if you want to dive deeper into learning Docker, this is a great resource.
 
+## Credit
+
+This repository uses upstream resources from the Docker library, specifically, the [docker-entrypoint](https://github.com/docker-library/postgres/blob/master/docker-entrypoint.sh)
 
 ## License
 
