@@ -2,11 +2,11 @@
 
 # Do not edit individual Dockerfiles manually. Instead, please make changes to the Dockerfile.template, which will be used by the build script to generate Dockerfiles.
 
-# By policy, the base image tag should be a quarterly tag unless there's a 
-# specific reason to use a different one. This means January, April, July, or 
+# By policy, the base image tag should be a quarterly tag unless there's a
+# specific reason to use a different one. This means January, April, July, or
 # October.
-# Using November right now to include OpenSSL CVE fixes.
-FROM cimg/base:2022.11
+
+FROM cimg/base:2023.01
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
@@ -84,8 +84,8 @@ RUN useradd postgres -m -s /bin/bash && \
 
 ENV POSTGRES_DB=circle_test
 
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
+RUN curl -sSL "http://raw.githubusercontent.com/docker-library/postgres/master/docker-entrypoint.sh" -o /usr/local/bin/docker-entrypoint.sh && \
+	ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN mkdir -p /var/lib/postgresql && \
