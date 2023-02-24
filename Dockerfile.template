@@ -84,7 +84,9 @@ RUN useradd postgres -m -s /bin/bash && \
 
 ENV POSTGRES_DB=circle_test
 
-RUN curl -sSL "http://raw.githubusercontent.com/docker-library/postgres/master/docker-entrypoint.sh" -o /usr/local/bin/docker-entrypoint.sh && \
+COPY postgresql.conf /etc/postgresql/postgresql.conf
+
+RUN curl -sSL "http://raw.githubusercontent.com/docker-library/postgres/master/docker-entrypoint.sh" -o docker-entrypoint.sh && \
 	ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
