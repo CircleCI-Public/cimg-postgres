@@ -17,8 +17,8 @@ workflows:
                 - main
           context: cimg-publishing
           post-steps:
-            - run:
-                mkdir -p /tmp/builds
+            - run: |
+                mkdir -p /tmp/builds && \
                 eval docker images --format='{{.Repository}}:{{.Tag}}' | grep "ccitest/postgres" > /tmp/builds/built-images
             - persist_to_workspace:
                 root: /tmp/builds
