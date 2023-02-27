@@ -6,13 +6,16 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/base:2023.01
+FROM cimg/base:2023.04
 
 LABEL maintainer="Community & Partner Engineering Team <community-partner@circleci.com>"
 
 ENV PG_VER=12.13
 ENV PG_MAJOR=12
 ENV POSTGRES_HOST_AUTH_METHOD=trust
+ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
+ENV PGDATA /var/lib/postgresql/data
+ENV POSTGRES_DB=circle_test
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -36,6 +39,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		llvm \
 		llvm-dev \
 		locales \
+		postgresql-server-dev-all \
 		python3-dev \
 		tcl-dev \
 		uuid-dev \
@@ -73,25 +77,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	make world && \
 	make install-world
 
+# clones pg_cron extension for local use, this is not available wihout installing
+# run this as a separate layer so it caches better
+RUN git clone https://github.com/citusdata/pg_cron.git /pg_cron && \
+	cd /pg_cron && make && PATH=$PATH make install
+
 RUN mkdir /docker-entrypoint-initdb.d
 
-ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
-ENV PGDATA /var/lib/postgresql/data
-
-RUN useradd postgres -m -s /bin/bash && \
-	groupadd --force postgres && \
-	adduser postgres postgres
-
-ENV POSTGRES_DB=circle_test
-
-COPY postgresql.conf /etc/postgresql/postgresql.conf
+COPY pg_cron.sh /docker-entrypoint-initdb.d/
+COPY custom-postgresql.conf /etc/postgresql/custom-postgresql.conf
 COPY docker-entrypoint.sh /usr/local/bin/
+
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh /docker-entrypoint-initdb.d/pg_cron.sh
 RUN mkdir -p /var/lib/postgresql && \
 	chown -R postgres:postgres /var/lib/postgresql && \
-	chown -R postgres:postgres /usr/local/bin/docker-entrypoint.sh
+	chown -R postgres:postgres /usr/local/bin/docker-entrypoint.sh && \
+	rm -rf /pg_cron
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
