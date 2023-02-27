@@ -80,8 +80,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	echo "cron.database_name = 'postgres'" >> $customconf && \
 	chown postgres $customconf && \
 	chgrp postgres $customconf && \ 
-	conf=/var/lib/postgresql/data/postgresql.conf && \
-	found=$(grep "include = '$customconf'" $conf) && \
+	found=$(grep "include = '$customconf'" /var/lib/postgresql/data/postgresql.conf) && \
+	# if the custom conf is not in the postgresql.conf file, we add it to the file before continuing.
 	if [ -z "$found" ]; then \ 
 	  echo "include = '$customconf'" >> $conf \
 	fi 
