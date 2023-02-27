@@ -75,15 +75,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	# clones pg_cron extension for local use, this is not available wihout installing
  	git clone https://github.com/citusdata/pg_cron.git /pg_cron && \
 	cd pg_cron  make && make install && \
-	customconf=/var/lib/postgresql/data/custom-conf.conf && echo "" > $customconf && \
-	echo "shared_preload_libraries = 'pg_cron'" >> $customconf && \
-	echo "cron.database_name = 'postgres'" >> $customconf && \
-	chown postgres $customconf && \
-	chgrp postgres $customconf && \ 
-	found=$(grep "include = '$customconf'" /var/lib/postgresql/data/postgresql.conf) && \
-	# if the custom conf is not in the postgresql.conf file, we add it to the file before continuing.
+	cron_conf=/var/lib/postgresql/data/custom-conf.conf && echo "" > $cron_conf && \
+	echo "shared_preload_libraries = 'pg_cron'" >> $cron_conf && \
+	echo "cron.database_name = 'postgres'" >> $cron_conf && \
+	chown postgres $cron_conf && \
+	chgrp postgres $cron_conf && \ 
+	found=$(grep "include = '$cron_conf'" /var/lib/postgresql/data/postgresql.conf) && \
+	# if the cron_conf is not in the postgresql.conf file, we add it to the file before continuing.
 	if [ -z "$found" ]; then \ 
-	  echo "include = '$customconf'" >> $conf \
+	  echo "include = '$cron_conf'" >> /var/lib/postgresql/data/postgresql.conf \
 	fi 
 	
 
