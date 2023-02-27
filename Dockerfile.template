@@ -74,12 +74,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	make install-world && \
 	# clones pg_cron extension for local use, this is not available wihout installing
  	git clone https://github.com/citusdata/pg_cron.git /pg_cron && \
-	cd pg_cron  make && make install
+	cd pg_cron  make && make install && \
+	customconf=/var/lib/postgresql/data/custom-conf.conf && echo "" > $customconf && \
+	echo "shared_preload_libraries = 'pg_cron'" >> $customconf && \
+	echo "cron.database_name = 'postgres'" >> $customconf && \
+	chown postgres $customconf && \
+	chgrp postgres $customconf && \ 
+	conf=/var/lib/postgresql/data/postgresql.conf && \
+	found=$(grep "include = '$customconf'" $conf) && \
+	if [ -z "$found" ]; then \ 
+	  echo "include = '$customconf'" >> $conf \
+	fi 
+	
 
+	
 RUN mkdir /docker-entrypoint-initdb.d
 
 # copies install script into entrypoint directory to initialize and expose pg_cron on start up
-COPY assets/pg_cron.sh /docker-entrypoint-initdb.d
+
 
 ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
