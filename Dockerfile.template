@@ -83,7 +83,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	found=$(grep "include = '$cron_conf'" /var/lib/postgresql/data/postgresql.conf) && \
 	# if the cron_conf is not in the postgresql.conf file, we add it to the file before continuing.
 	if [ -z "$found" ]; then 
-	  echo "include = '$cron_conf'" >> /var/lib/postgresql/data/postgresql.conf \
+	  echo "include = '$cron_conf'" >> /var/lib/postgresql/data/postgresql.conf 
 	fi 
 	
 RUN mkdir /docker-entrypoint-initdb.d
