@@ -79,10 +79,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	echo "shared_preload_libraries = 'pg_cron'" >> $cron_conf && \
 	echo "cron.database_name = 'postgres'" >> $cron_conf && \
 	chown postgres $cron_conf && \
-	chgrp postgres $cron_conf && \ 
+	chgrp postgres $cron_conf && \
 	found=$(grep "include = '$cron_conf'" /var/lib/postgresql/data/postgresql.conf) && \
 	# if the cron_conf is not in the postgresql.conf file, we add it to the file before continuing.
-	if [ -z "$found" ]; then \ 
+	if [ -z "$found" ]; then 
 	  echo "include = '$cron_conf'" >> /var/lib/postgresql/data/postgresql.conf \
 	fi 
 	
