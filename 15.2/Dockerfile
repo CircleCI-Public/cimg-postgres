@@ -84,6 +84,7 @@ RUN useradd postgres -m -s /bin/bash && \
 
 ENV POSTGRES_DB=circle_test
 
+COPY postgresql.conf /etc/postgresql/postgresql.conf
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
