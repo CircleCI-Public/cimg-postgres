@@ -16,6 +16,7 @@ ENV POSTGRES_HOST_AUTH_METHOD=trust
 ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
 ENV POSTGRES_DB=circle_test
+ENV PGTAP_VERSION 1.2.0
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -82,19 +83,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN git clone https://github.com/citusdata/pg_cron.git /pg_cron && \
 	cd /pg_cron && make && PATH=$PATH make install
 
-RUN mkdir /docker-entrypoint-initdb.d
+# Install pgTAP & pg_prove utility.
+RUN git clone --depth 1 -b "v$PGTAP_VERSION" https://github.com/theory/pgtap.git /pgtap && \
+	cd /pgtap && make && make install
+RUN curl -sL https://cpanmin.us | perl - App::cpanminus && \
+	cpanm -n TAP::Parser::SourceHandler::pgTAP
 
+RUN mkdir /docker-entrypoint-initdb.d
+# Enable extensions
 COPY pg_cron.sh /docker-entrypoint-initdb.d/
+RUN echo "CREATE EXTENSION pgtap;" > /docker-entrypoint-initdb.d/pgtap.sql
+
 COPY custom-postgresql.conf /etc/postgresql/custom-postgresql.conf
 COPY docker-entrypoint.sh /usr/local/bin/
-
-RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
+# Backwards compatibility
+RUN ln -s usr/local/bin/docker-entrypoint.sh / 
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh /docker-entrypoint-initdb.d/pg_cron.sh
 RUN mkdir -p /var/lib/postgresql && \
 	chown -R postgres:postgres /var/lib/postgresql && \
 	chown -R postgres:postgres /usr/local/bin/docker-entrypoint.sh && \
-	rm -rf /pg_cron
+	rm -rf /pg_cron /pgtap
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
