@@ -138,8 +138,7 @@ The generated Dockerfile will be located at `./13.2/Dockefile`.
 To build this image locally and try it out, you can run the following:
 
 ```bash
-cd 13.2
-docker build -t test/postgres:13.2 .
+docker build -f 13.2/Dockerfile -t test/postgres:13.2 .
 docker run -it test/postgres:13.2 bash
 ```
 
