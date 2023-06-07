@@ -17,6 +17,7 @@ ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
 ENV POSTGRES_DB=circle_test
 ENV PGTAP_VERSION 1.2.0
+ENV PARTMAN_VERSION 4.7.2
 
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -77,6 +78,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	# we can change from world to world-bin in newer releases
 	make world && \
 	make install-world
+
+RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/v${PARTMAN_VERSION}.tar.gz" | tar -xz && \
+	cd pg_partman-${PARTMAN_VERSION} && make NO_BGW=1 install
 
 # clones pg_cron extension for local use, this is not available wihout installing
 # run this as a separate layer so it caches better
