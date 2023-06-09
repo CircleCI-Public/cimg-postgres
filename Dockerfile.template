@@ -77,21 +77,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& \
 	# we can change from world to world-bin in newer releases
 	make world && \
-	make install-world
+	make install-world && \
+	cd .. && rm -rf postgresql-${PG_VER}
 
 RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/v${PARTMAN_VERSION}.tar.gz" | tar -xz && \
-	cd pg_partman-${PARTMAN_VERSION} && make NO_BGW=1 install
+	cd pg_partman-${PARTMAN_VERSION} && make NO_BGW=1 install && \
+	cd .. && rm -rf pg_partman-${PARTMAN_VERSION}
 
 # clones pg_cron extension for local use, this is not available wihout installing
 # run this as a separate layer so it caches better
 RUN git clone --depth 1 https://github.com/citusdata/pg_cron.git /pg_cron && \
-	cd /pg_cron && make && PATH=$PATH make install
+	cd /pg_cron && make && PATH=$PATH make install && \
+	rm -rf /pg_cron
 
 # Install pgTAP & pg_prove utility.
 RUN git clone --depth 1 -b "v$PGTAP_VERSION" https://github.com/theory/pgtap.git /pgtap && \
 	cd /pgtap && make && make install && \
 	curl -sL https://cpanmin.us | perl - App::cpanminus && \
-	cpanm -n TAP::Parser::SourceHandler::pgTAP
+	cpanm -n TAP::Parser::SourceHandler::pgTAP && \
+	rm -rf /pgtap
 
 # Enable extensions
 RUN mkdir /docker-entrypoint-initdb.d && \
@@ -101,13 +105,13 @@ COPY pg_cron.sh /docker-entrypoint-initdb.d/
 COPY custom-postgresql.conf /etc/postgresql/custom-postgresql.conf
 COPY docker-entrypoint.sh /usr/local/bin/
 # Backwards compatibility
-RUN ln -s usr/local/bin/docker-entrypoint.sh / 
+RUN ln -s usr/local/bin/docker-entrypoint.sh /
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh /docker-entrypoint-initdb.d/pg_cron.sh && \
 	mkdir -p /var/lib/postgresql && \
 	chown -R postgres:postgres /var/lib/postgresql && \
-	chown -R postgres:postgres /usr/local/bin/docker-entrypoint.sh && \
-	rm -rf /pg_cron /pgtap
+	chown -R postgres:postgres /usr/local/bin/docker-entrypoint.sh
+
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
