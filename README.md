@@ -156,9 +156,11 @@ When releasing proper images for CircleCI, this script is run from a CircleCI pi
 ## Configuration
 
 Because some configurations for postgres are enabled at runtime, it is difficult if not impossible to change certain settings.
-As a result, we've provided a configuration file within this repository that allows you to import certain properties that can support your use case. This is located at the project root under `postgres.conf`, however, you would be able to supply a custom configuration file yourself. In doing so, you would also need to specify this file when running the docker container.
+As a result, we've provided a configuration file within this repository that allows you to import certain properties that can support your use case. This is located at the project root under `custom-postgres.conf`, however, you would be able to supply a custom configuration file yourself. In doing so, you would also need to specify this file when running the docker container.
 
 For example, in the `.circleci/config.yml`, we are using it with this command; specifically, the "postgres -c 'config_file=xxx'" addition.
+
+Please note there are additions to this file, such as `shared_preload_libraries` that may not be needed.
 
 ```bash
 docker run --rm --env POSTGRES_USER=user --env POSTGRES_PASSWORD=passw0rd -p 5432:5432 -d $IMAGE postgres -c 'config_file=/etc/postgresql/postgresql.conf'
@@ -211,6 +213,8 @@ New Go images will automatically pick up the changes.
 
 If you *really* want to publish changes from a parent image into the PostgreSQL image, you have to build a specific image version as if it was a new image.
 This will create a new Dockerfile and once published, a new image.
+
+Extensions in the parent image will **not** have extensions enabled by default. This should be done by the user. Please refer to respective README's on how to enable, but the general idea would be to create a `*.sql` file in `/docker-entrypoint-initdb.d/` along with custom configurations, which can be referred to in the configurations section of the README
 
 **PostgreSQL specific changes** - Editing the `Dockerfile.template` file in this repo will modify the PostgreSQL image specifically.
 Don't forget that to see any of these changes locally, the `gen-dockerfiles.sh` script will need to be run again (see above).
