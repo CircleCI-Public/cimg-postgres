@@ -23,6 +23,7 @@ workflows:
     jobs:
       - cimg/build-and-deploy:
           name: "Staging"
+          resource-class: 2xlarge+
           docker-namespace: ccitest
           docker-repository: postgres
           publish-branch: test
@@ -30,47 +31,7 @@ workflows:
             branches:
               ignore:
                 - main
-          # post-steps:
-          #   - run:
-          #       name: Install Prerequisites
-          #       command: |
-          #         sudo apt-get update && \
-          #         sudo apt-get install -y postgresql-client
-          #   - run:
-          #       name: Test Docker Images
-          #       shell: /bin/bash -o pipefail
-          #       command: |
-          #         ssh -f -N -L localhost:5432:localhost:5432 remote-docker
-          #         IMAGES=$(docker images --format='{{.Repository}}:{{.Tag}}' | grep "ccitest/postgres")
-          #         for IMAGE in $IMAGES; do
-          #           printf "Booting $IMAGE...\n"
-          #           CONTAINER_ID=$(docker run --rm --env POSTGRES_USER=user --env POSTGRES_PASSWORD=passw0rd -p 5432:5432 -d $IMAGE postgres -c 'config_file=/var/lib/postgresql/data/postgresql.conf')
-          #           for i in {1..20}; do
-          #             printf "[$i/20] Checking Postgres is up...\n"
-          #             pg_isready -h 127.0.0.1
-          #             if [ $? -eq 0 ]; then
-          #               printf "Booted $IMAGE!\n"
-          #               break
-          #             elif [ $? -ne 0 ] && [ $i -eq 20 ]; then
-          #               printf "Failed to boot image\n"
-          #               exit 1
-          #             fi
-          #             printf "[$i/20] No response. Sleeping 10s...\n"
-          #             sleep 10s
-          #           done
-          #           printf "Running Test Command...\n"
-          #           printf "Running Version Check...\n"
-          #           VERSION=$(echo $IMAGE | cut -d ":" -f2 | cut -d "-" -f1)
-          #           if PGPASSWORD=passw0rd psql -h 127.0.0.1 -U user postgres -c "SELECT VERSION();" | grep $VERSION ; then
-          #             printf "Version matches!\n"
-          #           else
-          #             printf "Version mismatch!\n"
-          #             exit 1
-          #           fi
-          #           printf "Stopping $IMAGE...\n"
-          #           docker stop $CONTAINER_ID >/dev/null 2>&1
-          #         done
-          #         printf "All images passed!\n"
+          post-steps:
             - slack/notify:
                 branch_pattern: release-v.+
                 event: pass
@@ -79,6 +40,7 @@ workflows:
           context: cimg-publishing
       - cimg/build-and-deploy:
           name: "Deploy"
+          resource-class: 2xlarge+
           docker-repository: postgres
           filters:
             branches:
