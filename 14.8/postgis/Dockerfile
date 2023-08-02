@@ -8,6 +8,8 @@ ENV POSTGIS_VER=3.2.4
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		clang \
 		libclang-dev \
+		llvm \
+		llvm-dev \
 		libgdal-dev \
 		libgeos-dev \
 		libjson-c-dev \
