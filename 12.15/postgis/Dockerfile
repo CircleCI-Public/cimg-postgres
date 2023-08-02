@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	curl -sSL "https://download.osgeo.org/postgis/source/postgis-${POSTGIS_VER}.tar.gz" | tar -xz && \
 	cd postgis-${POSTGIS_VER} && \
 	./configure && \
-	make && \
+	make -j $(nproc) && \
 	make install && \
 	echo "CREATE EXTENSION postgis;" > /docker-entrypoint-initdb.d/postgis.sql
 
