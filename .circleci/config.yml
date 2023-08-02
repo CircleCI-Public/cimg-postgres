@@ -30,6 +30,7 @@ workflows:
             branches:
               ignore:
                 - main
+          post-steps:
             - slack/notify:
                 branch_pattern: release-v.+
                 event: pass
