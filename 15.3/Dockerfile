@@ -16,13 +16,13 @@ ENV POSTGRES_HOST_AUTH_METHOD=trust
 ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
 ENV POSTGRES_DB=circle_test
+ENV PGTAP_VERSION 1.2.0
+ENV PARTMAN_VERSION 4.7.2
 
 USER root
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		clang \
+RUN BUILD_DEPS="clang \
 		dirmngr \
 		gnupg \
-		gosu \
 		libclang-dev \
 		libicu-dev \
 		libipc-run-perl \
@@ -38,11 +38,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		libxslt1-dev \
 		llvm \
 		llvm-dev \
-		locales \
 		postgresql-server-dev-all \
 		python3-dev \
 		tcl-dev \
-		uuid-dev \
+		uuid-dev" && \
+	apt-get update && apt-get install -y --no-install-recommends \
+	gosu \
+	locales \
+	$BUILD_DEPS \
 	&& \
 	rm -rf /var/lib/apt/lists/* && \
 	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
@@ -75,12 +78,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& \
 	# we can change from world to world-bin in newer releases
 	make world && \
-	make install-world
+	make install-world && \
+	cd .. && rm -rf postgresql-${PG_VER} \
+	&& \
+	git clone --depth 1 https://github.com/citusdata/pg_cron.git /pg_cron && \
+	cd /pg_cron && make && PATH=$PATH make install && \
+	rm -rf /pg_cron && \
+	apt-get purge -y --auto-remove $BUILD_DEPS
 
-# clones pg_cron extension for local use, this is not available wihout installing
-# run this as a separate layer so it caches better
-RUN git clone https://github.com/citusdata/pg_cron.git /pg_cron && \
-	cd /pg_cron && make && PATH=$PATH make install
+RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/v${PARTMAN_VERSION}.tar.gz" | tar -xz && \
+	cd pg_partman-${PARTMAN_VERSION} && make NO_BGW=1 install && \
+	cd .. && rm -rf pg_partman-${PARTMAN_VERSION}
+
+# Install pgTAP & pg_prove utility.
+RUN git clone --depth 1 -b "v$PGTAP_VERSION" https://github.com/theory/pgtap.git /pgtap && \
+	cd /pgtap && make && make install && \
+	curl -sL https://cpanmin.us | perl - App::cpanminus && \
+	cpanm -n TAP::Parser::SourceHandler::pgTAP && \
+	rm -rf /pgtap
 
 RUN mkdir /docker-entrypoint-initdb.d
 
@@ -88,13 +103,14 @@ COPY pg_cron.sh /docker-entrypoint-initdb.d/
 COPY custom-postgresql.conf /etc/postgresql/custom-postgresql.conf
 COPY docker-entrypoint.sh /usr/local/bin/
 
-RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
+# Backwards compatibility
+RUN ln -s usr/local/bin/docker-entrypoint.sh /
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh /docker-entrypoint-initdb.d/pg_cron.sh
-RUN mkdir -p /var/lib/postgresql && \
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh /docker-entrypoint-initdb.d/pg_cron.sh && \
+	mkdir -p /var/lib/postgresql && \
 	chown -R postgres:postgres /var/lib/postgresql && \
-	chown -R postgres:postgres /usr/local/bin/docker-entrypoint.sh && \
-	rm -rf /pg_cron
+	chown -R postgres:postgres /etc/postgresql && \
+	chown -R postgres:postgres /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 STOPSIGNAL SIGINT

@@ -20,4 +20,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	cd postgis-${POSTGIS_VER} && \
 	./configure && \
 	make && \
-	make install
+	make install && \
+	echo "CREATE EXTENSION postgis;" > /docker-entrypoint-initdb.d/postgis.sql
+
