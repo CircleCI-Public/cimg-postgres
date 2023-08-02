@@ -6,6 +6,10 @@ LABEL maintainer="Community & Partner Engineering Team <community-partner@circle
 
 ENV POSTGIS_VER=3.2.4
 RUN apt-get update && apt-get install -y --no-install-recommends \
+		clang \
+		libclang-dev \
+		llvm \
+		llvm-dev \
 		libgdal-dev \
 		libgeos-dev \
 		libjson-c-dev \
@@ -19,7 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	curl -sSL "https://download.osgeo.org/postgis/source/postgis-${POSTGIS_VER}.tar.gz" | tar -xz && \
 	cd postgis-${POSTGIS_VER} && \
 	./configure && \
-	make && \
+	make -j $(nproc) && \
 	make install && \
 	echo "CREATE EXTENSION postgis;" > /docker-entrypoint-initdb.d/postgis.sql
 
