@@ -77,7 +77,7 @@ RUN BUILD_DEPS="clang \
 		--with-lz4 \
 	&& \
 	# we can change from world to world-bin in newer releases
-	make world && \
+	make -j $(nproc) world && \
 	make install-world && \
 	cd .. && rm -rf postgresql-${PG_VER} \
 	&& \
@@ -92,7 +92,7 @@ RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/v${PARTMAN_VERSIO
 
 # Install pgTAP & pg_prove utility.
 RUN git clone --depth 1 -b "v$PGTAP_VERSION" https://github.com/theory/pgtap.git /pgtap && \
-	cd /pgtap && make && make install && \
+	cd /pgtap && make -j $(nproc) && make install && \
 	curl -sL https://cpanmin.us | perl - App::cpanminus && \
 	cpanm -n TAP::Parser::SourceHandler::pgTAP && \
 	rm -rf /pgtap
