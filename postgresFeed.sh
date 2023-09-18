@@ -8,8 +8,24 @@ else
   exit 1
 fi
 
+getPostGISVersion() {
+  local templateFile=$1
+  RSS_URL="https://github.com/postgis/postgis/tags.atom"
+  VERSIONS=$(curl --silent "$RSS_URL" | grep -E '(title)' | tail -n +2 | sed -e 's/^[ \t]*//' | sed -e 's/<title>//' -e 's/<\/title>//')
+
+  for version in $VERSIONS; do
+    if [[ $version =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
+      generateVersions "$version"
+      generateSearchTerms "POSTGIS_VER=" "$templateFile" ""
+      replaceVersions "POSTGIS_VER=" "$SEARCH_TERM" true
+    fi
+  done
+}
 
 getPostgresVersion() {
+  echo "Getting latest PostGIS version..."
+  getPostGISVersion "variants/postgis.Dockerfile.template"
+
   RSS_URL="https://github.com/postgres/postgres/tags.atom"
   VERSIONS=$(curl --silent "$RSS_URL" | grep -E '(title)' | tail -n +2 | sed -e 's/^[ \t]*//' | sed -e 's/<title>//' -e 's/<\/title>//')
 
@@ -17,7 +33,7 @@ getPostgresVersion() {
     if [[ $version =~ ^REL_[0-9]+(\_[0-9]+)*$ ]]; then
       generateVersions "$(echo "$version" | sed -r 's/REL_//g; s/_/./g')"
       generateSearchTerms "PG_VER=" "$majorMinor/Dockerfile" ""
-      directoryCheck "$majorMinor" "$SEARCH_TERM"
+      directoryCheck "$majorMinor" "$SEARCH_TERM" true
     fi
   done
 }
