@@ -8,6 +8,14 @@ else
   exit 1
 fi
 
+continueRelease() {
+  local version=$1
+  if ! eval grep -q "v$version" releases.txt; then
+    echo "Release $version not ready"
+    exit 0
+  fi
+}
+
 getPostGISVersion() {
   local templateFile=$1
   RSS_URL="https://github.com/postgis/postgis/tags.atom"
@@ -26,6 +34,9 @@ getPostgresVersion() {
   echo "Getting latest PostGIS version..."
   getPostGISVersion "variants/postgis.Dockerfile.template"
 
+  echo "Getting postgres release list..."
+  curl -s https://ftp.postgresql.org/pub/source/ > releases.txt
+
   RSS_URL="https://github.com/postgres/postgres/tags.atom"
   VERSIONS=$(curl --silent "$RSS_URL" | grep -E '(title)' | tail -n +2 | sed -e 's/^[ \t]*//' | sed -e 's/<title>//' -e 's/<\/title>//')
 
@@ -34,6 +45,7 @@ getPostgresVersion() {
       generateVersions "$(echo "$version" | sed -r 's/REL_//g; s/_/./g')"
       generateSearchTerms "PG_VER=" "$majorMinor/Dockerfile" ""
       directoryCheck "$majorMinor" "$SEARCH_TERM" true
+      continueRelease "$newVersion"
     fi
   done
 }
