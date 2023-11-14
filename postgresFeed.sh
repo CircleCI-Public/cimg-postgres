@@ -31,6 +31,7 @@ getPostGISVersion() {
 }
 
 getPostgresVersion() {
+  EOL_VERSION=11
   echo "Getting latest PostGIS version..."
   getPostGISVersion "variants/postgis.Dockerfile.template"
 
@@ -41,7 +42,7 @@ getPostgresVersion() {
   VERSIONS=$(curl --silent "$RSS_URL" | grep -E '(title)' | tail -n +2 | sed -e 's/^[ \t]*//' | sed -e 's/<title>//' -e 's/<\/title>//')
 
   for version in $VERSIONS; do
-    if [[ $version =~ ^REL_[0-9]+(\_[0-9]+)*$ ]]; then
+    if [[ $version =~ ^REL_[0-9]+(\_[0-9]+)*$ && $(echo "$version" | awk -F '_' '{print $2}') -gt "$EOL_VERSION" ]]; then
       generateVersions "$(echo "$version" | sed -r 's/REL_//g; s/_/./g')"
       generateSearchTerms "PG_VER=" "$majorMinor/Dockerfile" ""
       directoryCheck "$majorMinor" "$SEARCH_TERM" true
@@ -53,6 +54,7 @@ getPostgresVersion() {
 getPostgresVersion
 
 if [ -n "${vers[*]}" ]; then
+  rm -rf releases.txt
   echo "Included version updates: ${vers[*]}"
   echo "Running release script"
   ./shared/release.sh "${vers[@]}"
