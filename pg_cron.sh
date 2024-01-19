@@ -12,11 +12,11 @@ chgrp postgres $customconf
 cat /etc/postgresql/custom-postgresql.conf
 
 # include custom config from main config
-conf=/var/lib/postgresql/data/postgresql.conf
+conf="$PGDATA/postgresql.conf"
 found=$(grep "include = '$customconf'" $conf)
 if [ -z "$found" ]; then
   echo "include = '$customconf'" >> $conf
 fi
 
-cat /var/lib/postgresql/data/postgresql.conf | grep shared
-cat /var/lib/postgresql/data/postgresql.conf | grep include
+cat "$PGDATA/postgresql.conf" | grep shared
+cat "$PGDATA/postgresql.conf" | grep include
