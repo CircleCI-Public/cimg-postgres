@@ -18,6 +18,7 @@ ENV PGDATA /var/lib/postgresql/data
 ENV POSTGRES_DB=circle_test
 ENV PGTAP_VERSION 1.2.0
 ENV PARTMAN_VERSION 4.7.2
+ENV PGVECTOR_VERSION 0.5.1
 
 USER root
 RUN BUILD_DEPS="clang \
@@ -84,6 +85,12 @@ RUN BUILD_DEPS="clang \
 	git clone --depth 1 https://github.com/citusdata/pg_cron.git /pg_cron && \
 	cd /pg_cron && make && PATH=$PATH make install && \
 	rm -rf /pg_cron && \
+  cd .. && \
+  git clone --depth 1 -b v${PGVECTOR_VERSION} https://github.com/pgvector/pgvector.git /pgvector && \
+  cd /pgvector && \
+  make && \
+  make install && \
+  rm -rf /pgvector && \
 	apt-get purge -y --auto-remove $BUILD_DEPS
 
 RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/v${PARTMAN_VERSION}.tar.gz" | tar -xz && \
