@@ -1,11 +1,5 @@
 version: 2.1
 
-jobs:
-  myfirstthing:
-    - run: env
-    - run: set
-    - run: sleep 10
-
 orbs:
   cimg: circleci/cimg@0.6.4
   slack: circleci/slack@4.12.1
@@ -14,6 +8,24 @@ parameters:
   cron:
     type: boolean
     default: true
+
+# Define the jobs we want to run for this project
+jobs:
+  myfirstthing:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+      - run: env
+      - run: set
+      - run: sleep 10
+  test:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - checkout
+      - run: echo "this is the test job"
 
 workflows:
   automated-wf:
