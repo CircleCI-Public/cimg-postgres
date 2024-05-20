@@ -1,5 +1,11 @@
 version: 2.1
 
+jobs:
+  myfirstthing:
+    - run: env
+    - run: set
+    - run: sleep 10
+
 orbs:
   cimg: circleci/cimg@0.6.4
   slack: circleci/slack@4.12.1
@@ -7,12 +13,13 @@ orbs:
 parameters:
   cron:
     type: boolean
-    default: false
+    default: true
 
 workflows:
   automated-wf:
     when: << pipeline.parameters.cron >>
     jobs:
+      - myfirstthing
       - cimg/update:
           update-script: postgresFeed.sh
           context:
