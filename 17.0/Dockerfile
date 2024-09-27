@@ -13,15 +13,18 @@ LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 ENV PG_VER=17.0
 ENV PG_MAJOR=17
 ENV POSTGRES_HOST_AUTH_METHOD=trust
-ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
-ENV PGDATA /var/lib/postgresql/data
+ENV PATH=/usr/lib/postgresql/$PG_MAJOR/bin:$PATH
+ENV PGDATA=/var/lib/postgresql/data
 ENV POSTGRES_DB=circle_test
-ENV PGTAP_VERSION 1.2.0
-ENV PARTMAN_VERSION 4.7.2
+ENV PGTAP_VERSION=1.2.0
+ENV PARTMAN_VERSION=4.7.2
 
 USER root
-RUN BUILD_DEPS="clang \
+RUN BUILD_DEPS="bison \
+        build-essential \
+        clang \
 		dirmngr \
+        flex \
 		gnupg \
 		libclang-dev \
 		libicu-dev \
