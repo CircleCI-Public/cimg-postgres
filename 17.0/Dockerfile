@@ -80,8 +80,8 @@ RUN BUILD_DEPS="bison \
 		--with-lz4 \
 	&& \
 	# we can change from world to world-bin in newer releases
-	make -j $(nproc) world && \
-	make install-world && \
+	make -j $(nproc) world-bin && \
+	make install-world-bin && \
 	cd .. && rm -rf postgresql-${PG_VER} \
 	&& \
 	git clone --depth 1 https://github.com/citusdata/pg_cron.git /pg_cron && \
