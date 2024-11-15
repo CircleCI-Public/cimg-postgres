@@ -21,10 +21,9 @@ ENV PARTMAN_VERSION=4.7.2
 
 USER root
 RUN BUILD_DEPS="bison \
-        build-essential \
-        clang \
+		clang \
 		dirmngr \
-        flex \
+		flex \
 		gnupg \
 		libclang-dev \
 		libicu-dev \
@@ -57,7 +56,7 @@ RUN BUILD_DEPS="bison \
 	./configure \
 		--prefix=/usr/lib/postgresql/$PG_MAJOR \
 		--enable-integer-datetimes \
-        --enable-thread-safety \
+		--enable-thread-safety \
 		--enable-tap-tests \
 		--with-uuid=e2fs \
 		--with-gnu-ld \
