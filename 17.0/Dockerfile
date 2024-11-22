@@ -21,30 +21,29 @@ ENV PARTMAN_VERSION=4.7.2
 
 USER root
 RUN BUILD_DEPS="bison \
-        build-essential \
         clang \
-		dirmngr \
+        dirmngr \
         flex \
-		gnupg \
-		libclang-dev \
-		libicu-dev \
-		libipc-run-perl \
-		libkrb5-dev \
-		libldap2-dev \
-		liblz4-dev \
-		libpam-dev \
-		libperl-dev \
-		libpython3-dev \
-		libreadline-dev \
-		libssl-dev \
-		libxml2-dev \
-		libxslt1-dev \
-		llvm \
-		llvm-dev \
-		postgresql-server-dev-all \
-		python3-dev \
-		tcl-dev \
-		uuid-dev" && \
+        gnupg \
+        libclang-dev \
+        libicu-dev \
+        libipc-run-perl \
+        libkrb5-dev \
+        libldap2-dev \
+        liblz4-dev \
+        libpam-dev \
+        libperl-dev \
+        libpython3-dev \
+        libreadline-dev \
+        libssl-dev \
+        libxml2-dev \
+        libxslt1-dev \
+        llvm \
+        llvm-dev \
+        postgresql-server-dev-all \
+        python3-dev \
+        tcl-dev \
+        uuid-dev" && \
 	apt-get update && apt-get install -y --no-install-recommends \
 	gosu \
 	locales \
@@ -58,7 +57,6 @@ RUN BUILD_DEPS="bison \
 		--prefix=/usr/lib/postgresql/$PG_MAJOR \
 		--enable-integer-datetimes \
 		--enable-thread-safety \
-		--enable-tap-tests \
 		--with-uuid=e2fs \
 		--with-gnu-ld \
 		--with-pgport=5432 \
