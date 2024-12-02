@@ -79,6 +79,21 @@ This is no longer the case.
 We're determining how much of a performance increase does this variant actually give before we decide to bring it back.
 If you used the legacy PostgreSQL image and you have data on the ram vs non-ram variant build times, please open a GitHub Issue and let us know.
 
+#### Feature Control
+
+To disable the PostgreSQL extension `pg_cron` set the Environment Variable `DISABLE_PG_CRON` to the value `true`
+
+```yaml
+jobs:
+  build:
+    docker:
+      - image: cimg/postgres:13.1-postgis
+        environment:
+          DISABLE_PG_CRON: true
+    steps:
+      - checkout
+      - run: echo "Do things"
+```
 
 ### Tagging Scheme
 
