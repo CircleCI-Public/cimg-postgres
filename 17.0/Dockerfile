@@ -57,7 +57,6 @@ RUN BUILD_DEPS="bison \
 		--prefix=/usr/lib/postgresql/$PG_MAJOR \
 		--enable-integer-datetimes \
 		--enable-thread-safety \
-		--enable-tap-tests \
 		--with-uuid=e2fs \
 		--with-gnu-ld \
 		--with-pgport=5432 \
