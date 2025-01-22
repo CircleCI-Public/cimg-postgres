@@ -20,7 +20,8 @@ ENV PGTAP_VERSION=1.2.0
 ENV PARTMAN_VERSION=4.7.2
 
 USER root
-RUN BUILD_DEPS="bison \
+RUN if [ $PG_MAJOR -ge 17 ]; then PG_RELEASE=world-bin; else PG_RELEASE=world; fi && \
+	BUILD_DEPS="bison \
 		clang \
 		dirmngr \
 		flex \
@@ -79,8 +80,8 @@ RUN BUILD_DEPS="bison \
 		--with-lz4 \
 	&& \
 	# we can change from world to world-bin in newer releases
-	make -j $(nproc) world && \
-	make install-world && \
+	make -j $(nproc) $PG_RELEASE && \
+	make install-$PG_RELEASE && \
 	cd .. && rm -rf postgresql-${PG_VER} \
 	&& \
 	git clone --depth 1 https://github.com/citusdata/pg_cron.git /pg_cron && \
