@@ -6,12 +6,12 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/%%PARENT%%:2024.02
+FROM cimg/base:2024.02
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
-ENV PG_VER=%%VERSION_FULL%%
-ENV PG_MAJOR=%%VERSION_MAJOR%%
+ENV PG_VER=17.2
+ENV PG_MAJOR=17
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 ENV PATH=/usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA=/var/lib/postgresql/data
@@ -58,7 +58,6 @@ RUN if [ $PG_MAJOR -ge 17 ]; then PG_RELEASE=world-bin; else PG_RELEASE=world; f
 		--prefix=/usr/lib/postgresql/$PG_MAJOR \
 		--enable-integer-datetimes \
 		--enable-thread-safety \
-		--enable-tap-tests \
 		--with-uuid=e2fs \
 		--with-gnu-ld \
 		--with-pgport=5432 \

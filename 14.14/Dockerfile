@@ -6,12 +6,12 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/%%PARENT%%:2024.02
+FROM cimg/base:2024.02
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
-ENV PG_VER=%%VERSION_FULL%%
-ENV PG_MAJOR=%%VERSION_MAJOR%%
+ENV PG_VER=14.14
+ENV PG_MAJOR=14
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 ENV PATH=/usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA=/var/lib/postgresql/data
@@ -20,8 +20,7 @@ ENV PGTAP_VERSION=1.2.0
 ENV PARTMAN_VERSION=4.7.2
 
 USER root
-RUN if [ $PG_MAJOR -ge 17 ]; then PG_RELEASE=world-bin; else PG_RELEASE=world; fi && \
-	BUILD_DEPS="bison \
+RUN BUILD_DEPS="bison \
 		clang \
 		dirmngr \
 		flex \
@@ -80,8 +79,8 @@ RUN if [ $PG_MAJOR -ge 17 ]; then PG_RELEASE=world-bin; else PG_RELEASE=world; f
 		--with-lz4 \
 	&& \
 	# we can change from world to world-bin in newer releases
-	make -j $(nproc) $PG_RELEASE && \
-	make install-$PG_RELEASE && \
+	make -j $(nproc) world && \
+	make install-world && \
 	cd .. && rm -rf postgresql-${PG_VER} \
 	&& \
 	git clone --depth 1 https://github.com/citusdata/pg_cron.git /pg_cron && \
