@@ -89,7 +89,7 @@ RUN if [ $PG_MAJOR -ge 17 ]; then PG_RELEASE=world-bin; else PG_RELEASE=world; f
 	rm -rf /pg_cron && \
 	apt-get purge -y --auto-remove $BUILD_DEPS
 
-RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/refs/tags/v${PARTMAN_VERSION}.tar.gz" | tar -xz && \
+RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/v${PARTMAN_VERSION}.tar.gz" | tar -xz && \
 	cd pg_partman-${PARTMAN_VERSION} && make NO_BGW=1 install && \
 	cd .. && rm -rf pg_partman-${PARTMAN_VERSION}
 
