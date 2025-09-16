@@ -17,8 +17,7 @@ ENV PATH=/usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA=/var/lib/postgresql/data
 ENV POSTGRES_DB=circle_test
 ENV PGTAP_VERSION=1.2.0
-ENV PARTMAN_VERSION=5.2.4
-ENV IP4R_VERSION=2.4.2
+ENV PARTMAN_VERSION=4.7.2
 
 USER root
 RUN if [ $PG_MAJOR -ge 17 ]; then PG_RELEASE=world-bin; else PG_RELEASE=world; fi && \
@@ -86,16 +85,12 @@ RUN if [ $PG_MAJOR -ge 17 ]; then PG_RELEASE=world-bin; else PG_RELEASE=world; f
 	&& \
 	git clone --depth 1 https://github.com/citusdata/pg_cron.git /pg_cron && \
 	cd /pg_cron && make && PATH=$PATH make install && \
-	rm -rf /pg_cron
+	rm -rf /pg_cron && \
+	apt-get purge -y --auto-remove $BUILD_DEPS
 
 RUN curl -sSL "https://github.com/pgpartman/pg_partman/archive/v${PARTMAN_VERSION}.tar.gz" | tar -xz && \
 	cd pg_partman-${PARTMAN_VERSION} && make NO_BGW=1 install && \
 	cd .. && rm -rf pg_partman-${PARTMAN_VERSION}
-
-# install ip4r
-RUN curl -sSL "https://github.com/RhodiumToad/ip4r/archive/refs/tags/${IP4R_VERSION}.tar.gz" | tar -xz && \
-	cd ip4r-${IP4R_VERSION} && make && make install && \
-	cd .. && rm -rf ip4r-${IP4R_VERSION}
 
 # Install pgTAP & pg_prove utility.
 RUN git clone --depth 1 -b "v$PGTAP_VERSION" https://github.com/theory/pgtap.git /pgtap && \
@@ -103,8 +98,6 @@ RUN git clone --depth 1 -b "v$PGTAP_VERSION" https://github.com/theory/pgtap.git
 	curl -sL https://cpanmin.us | perl - App::cpanminus && \
 	cpanm -n TAP::Parser::SourceHandler::pgTAP && \
 	rm -rf /pgtap
-
-RUN apt-get purge -y --auto-remove $BUILD_DEPS
 
 RUN mkdir /docker-entrypoint-initdb.d
 
