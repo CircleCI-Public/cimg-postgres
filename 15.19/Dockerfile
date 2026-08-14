@@ -6,12 +6,12 @@
 # specific reason to use a different one. This means January, April, July, or
 # October.
 
-FROM cimg/%%PARENT%%:2026.08-22.04
+FROM cimg/base:2026.08-22.04
 
 LABEL maintainer="CircleCI Execution Team <eng-execution@circleci.com>"
 
-ENV PG_VER=%%VERSION_FULL%%
-ENV PG_MAJOR=%%VERSION_MAJOR%%
+ENV PG_VER=15.19
+ENV PG_MAJOR=15
 ENV POSTGRES_HOST_AUTH_METHOD=trust
 ENV PATH=/usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA=/var/lib/postgresql/data
