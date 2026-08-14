@@ -4,13 +4,13 @@ set -eo pipefail
 
 docker context create cimg
 docker buildx create --use cimg
-docker buildx build --platform=linux/amd64,linux/arm64 --file 18.4/Dockerfile -t cimg/postgres:18.4 -t cimg/postgres:18.4 --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 18.4/postgis/Dockerfile -t cimg/postgres:18.4-postgis -t cimg/postgres:18.4-postgis --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 17.10/Dockerfile -t cimg/postgres:17.10 -t cimg/postgres:17.10 --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 17.10/postgis/Dockerfile -t cimg/postgres:17.10-postgis -t cimg/postgres:17.10-postgis --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 16.14/Dockerfile -t cimg/postgres:16.14 -t cimg/postgres:16.14 --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 16.14/postgis/Dockerfile -t cimg/postgres:16.14-postgis -t cimg/postgres:16.14-postgis --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 15.18/Dockerfile -t cimg/postgres:15.18 -t cimg/postgres:15.18 --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 15.18/postgis/Dockerfile -t cimg/postgres:15.18-postgis -t cimg/postgres:15.18-postgis --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 14.23/Dockerfile -t cimg/postgres:14.23 -t cimg/postgres:14.23 --push .
-docker buildx build --platform=linux/amd64,linux/arm64 --file 14.23/postgis/Dockerfile -t cimg/postgres:14.23-postgis -t cimg/postgres:14.23-postgis --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 18.6/Dockerfile -t cimg/postgres:18.6 -t cimg/postgres:18.6 --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 18.6/postgis/Dockerfile -t cimg/postgres:18.6-postgis -t cimg/postgres:18.6-postgis --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 17.11/Dockerfile -t cimg/postgres:17.11 -t cimg/postgres:17.11 --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 17.11/postgis/Dockerfile -t cimg/postgres:17.11-postgis -t cimg/postgres:17.11-postgis --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 16.15/Dockerfile -t cimg/postgres:16.15 -t cimg/postgres:16.15 --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 16.15/postgis/Dockerfile -t cimg/postgres:16.15-postgis -t cimg/postgres:16.15-postgis --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 15.19/Dockerfile -t cimg/postgres:15.19 -t cimg/postgres:15.19 --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 15.19/postgis/Dockerfile -t cimg/postgres:15.19-postgis -t cimg/postgres:15.19-postgis --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 14.24/Dockerfile -t cimg/postgres:14.24 -t cimg/postgres:14.24 --push .
+docker buildx build --platform=linux/amd64,linux/arm64 --file 14.24/postgis/Dockerfile -t cimg/postgres:14.24-postgis -t cimg/postgres:14.24-postgis --push .
