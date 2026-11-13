@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		llvm-dev \
 		libgdal-dev \
 		libgeos-dev \
+		libgmp-dev \
 		libjson-c-dev \
 		libmysqlclient-dev \
 		libproj-dev \
