@@ -2,6 +2,9 @@
 
 repository=postgres
 parent=base
+base_version=2026.11-22.04
+new_version=2026.11-26.04
+new_tags=(19.0)
 variants=(postgis)
 namespace=cimg
 arm64=1
